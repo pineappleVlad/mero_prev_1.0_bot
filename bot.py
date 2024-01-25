@@ -513,6 +513,7 @@ def result_correct(call):
         if call.data == 'Опубликовать':
             send_channel_result(chat_id)
             bot.send_message(chat_id, f'Успешно отправлено')
+            handle_cancel_without_message(message=call.message)
             bot.send_message(chat_id, f'Для создания нового объявления напишите команду /start')
         elif call.data == 'Создать объявление заново':
             handle_cancel(call.message)
@@ -541,6 +542,19 @@ def handle_cancel(message):
 
     bot.send_message(chat_id, "Создание объявления отменено. Для создания нового напишите /start")
 
+
+def handle_cancel_without_message(message):
+    chat_id = message.chat.id
+
+
+    if chat_id in users_db:
+        if 'current_message' in users_db[chat_id]:
+            try:
+                bot.edit_message_reply_markup(chat_id=chat_id, message_id=users_db[chat_id]['current_message'],
+                                              reply_markup=None)
+            except telebot.apihelper.ApiTelegramException:
+                pass
+        del users_db[chat_id]
 
 # Отправление текущего состояния объявления
 def send_current_state(chat_id, source):
