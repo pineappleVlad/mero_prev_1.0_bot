@@ -379,7 +379,7 @@ def handle_hashtags(message):
                         users_db[chat_id]['hashtags'] += base_date_hash
 
                     for hashtag in message.text.split(' '):
-                        if hashtag in biz_hashtags and 'data_hashtag' in users_db[chat_id]:
+                        if 'data_hashtag' in users_db[chat_id]:
                             date_hash = users_db[chat_id]['data_hashtag']
                             extra_date_hash = hashtag + '_' + date_hash[1:4] + date_hash[-2] + date_hash[-1] + ' '
                             users_db[chat_id]['hashtags'] += extra_date_hash
